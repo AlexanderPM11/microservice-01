@@ -12,14 +12,14 @@ namespace microservice_01.Dtos
     );
 
     public record CreateItemDto(
-        [Required] string Name, 
+        [Required(ErrorMessage = "El nombre es obligatorio.")] string Name, 
         string Description, 
-        [Range(0, 1000000)] decimal Price
+        [Range(0, 1000, ErrorMessage = "El precio debe estar entre {1} y {2}.")] decimal Price
     );
 
     public record UpdateItemDto(
-        [Required] string Name, 
+        [Required(ErrorMessage = "El nombre es obligatorio.")] string Name, 
         string Description, 
-        [Range(0, 1000000)] decimal Price
+        [Range(0, 1000, ErrorMessage = "El precio debe estar entre {1} y {2}.")] decimal Price
     );
 }
