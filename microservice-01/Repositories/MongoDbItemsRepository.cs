@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using microservice_01.Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -19,32 +20,33 @@ namespace microservice_01.Repositories
             _itemsCollection = database.GetCollection<Item>(CollectionName);
         }
 
-        public void CreateItem(Item item)
+        public async Task CreateItemAsync(Item item)
         {
-            _itemsCollection.InsertOne(item);
+            await _itemsCollection.InsertOneAsync(item);
         }
 
-        public void DeleteItem(Guid id)
-        {
-            var filter = _filterBuilder.Eq(item => item.Id, id);
-            _itemsCollection.DeleteOne(filter);
-        }
-
-        public Item? GetItem(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
             var filter = _filterBuilder.Eq(item => item.Id, id);
-            return _itemsCollection.Find(filter).SingleOrDefault();
+            await _itemsCollection.DeleteOneAsync(filter);
         }
 
-        public IEnumerable<Item> GetItems()
+        public async Task<Item?> GetItemAsync(Guid id)
         {
-            return _itemsCollection.Find(new BsonDocument()).ToList();
+            var filter = _filterBuilder.Eq(item => item.Id, id);
+            return await _itemsCollection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public void UpdateItem(Item item)
+        public async Task<IEnumerable<Item>> GetItemsAsync()
+        {
+            var items = await _itemsCollection.Find(new BsonDocument()).ToListAsync();
+            return items;
+        }
+
+        public async Task UpdateItemAsync(Item item)
         {
             var filter = _filterBuilder.Eq(existingItem => existingItem.Id, item.Id);
-            _itemsCollection.ReplaceOne(filter, item);
+            await _itemsCollection.ReplaceOneAsync(filter, item);
         }
     }
 }

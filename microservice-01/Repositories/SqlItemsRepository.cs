@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using microservice_01.Data;
 using microservice_01.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace microservice_01.Repositories
 {
@@ -15,36 +17,36 @@ namespace microservice_01.Repositories
             _context = context;
         }
 
-        public void CreateItem(Item item)
+        public async Task CreateItemAsync(Item item)
         {
-            _context.Items.Add(item);
-            _context.SaveChanges();
+            await _context.Items.AddAsync(item);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteItem(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
-            var item = GetItem(id);
+            var item = await GetItemAsync(id);
             if (item is not null)
             {
                 _context.Items.Remove(item);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public Item? GetItem(Guid id)
+        public async Task<Item?> GetItemAsync(Guid id)
         {
-            return _context.Items.Find(id);
+            return await _context.Items.FindAsync(id);
         }
 
-        public IEnumerable<Item> GetItems()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            return _context.Items.ToList();
+            return await _context.Items.ToListAsync();
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
             _context.Items.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using microservice_01.Entities;
 
 namespace microservice_01.Repositories
@@ -14,37 +15,41 @@ namespace microservice_01.Repositories
             new Item { Id = Guid.NewGuid(), Name = "Bronze Shield", Description = "A sturdy bronze shield", Price = 18, CreatedDate = DateTimeOffset.UtcNow }
         };
 
-        public IEnumerable<Item> GetItems()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            return _items;
+            return await Task.FromResult(_items);
         }
 
-        public Item? GetItem(Guid id)
+        public async Task<Item?> GetItemAsync(Guid id)
         {
-            return _items.SingleOrDefault(item => item.Id == id);
+            var item = _items.SingleOrDefault(item => item.Id == id);
+            return await Task.FromResult(item);
         }
 
-        public void CreateItem(Item item)
+        public async Task CreateItemAsync(Item item)
         {
             _items.Add(item);
+            await Task.CompletedTask;
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
             var index = _items.FindIndex(existingItem => existingItem.Id == item.Id);
             if (index != -1)
             {
                 _items[index] = item;
             }
+            await Task.CompletedTask;
         }
 
-        public void DeleteItem(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
             var index = _items.FindIndex(existingItem => existingItem.Id == id);
             if (index != -1)
             {
                 _items.RemoveAt(index);
             }
+            await Task.CompletedTask;
         }
     }
 }
