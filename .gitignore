@@ -1,0 +1,19 @@
+# Visual Studio temporary/cache files
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Build folders
+[Bb]in/
+[Oo]bj/
+
+# IDE/Editor folders
+.idea/
+.vscode/
+
+# Operating system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
